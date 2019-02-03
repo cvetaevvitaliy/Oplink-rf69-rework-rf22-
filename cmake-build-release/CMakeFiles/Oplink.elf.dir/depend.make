@@ -751,6 +751,45 @@ CMakeFiles/Oplink.elf.dir/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_
 CMakeFiles/Oplink.elf.dir/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.c.obj: ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ioreq.h
 CMakeFiles/Oplink.elf.dir/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.c.obj: ../Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.c
 
+CMakeFiles/Oplink.elf.dir/Src/RFM69.c.obj: ../Inc/RFM69.h
+CMakeFiles/Oplink.elf.dir/Src/RFM69.c.obj: ../Inc/RFM69registers.h
+CMakeFiles/Oplink.elf.dir/Src/RFM69.c.obj: ../Inc/control_rf69.h
+CMakeFiles/Oplink.elf.dir/Src/RFM69.c.obj: ../Src/RFM69.c
+
+CMakeFiles/Oplink.elf.dir/Src/control_rf69.c.obj: ../Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f103xb.h
+CMakeFiles/Oplink.elf.dir/Src/control_rf69.c.obj: ../Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f1xx.h
+CMakeFiles/Oplink.elf.dir/Src/control_rf69.c.obj: ../Drivers/CMSIS/Device/ST/STM32F1xx/Include/system_stm32f1xx.h
+CMakeFiles/Oplink.elf.dir/Src/control_rf69.c.obj: ../Drivers/CMSIS/Include/cmsis_armcc.h
+CMakeFiles/Oplink.elf.dir/Src/control_rf69.c.obj: ../Drivers/CMSIS/Include/cmsis_armcc_V6.h
+CMakeFiles/Oplink.elf.dir/Src/control_rf69.c.obj: ../Drivers/CMSIS/Include/cmsis_gcc.h
+CMakeFiles/Oplink.elf.dir/Src/control_rf69.c.obj: ../Drivers/CMSIS/Include/core_cm3.h
+CMakeFiles/Oplink.elf.dir/Src/control_rf69.c.obj: ../Drivers/CMSIS/Include/core_cmFunc.h
+CMakeFiles/Oplink.elf.dir/Src/control_rf69.c.obj: ../Drivers/CMSIS/Include/core_cmInstr.h
+CMakeFiles/Oplink.elf.dir/Src/control_rf69.c.obj: ../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h
+CMakeFiles/Oplink.elf.dir/Src/control_rf69.c.obj: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h
+CMakeFiles/Oplink.elf.dir/Src/control_rf69.c.obj: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_cortex.h
+CMakeFiles/Oplink.elf.dir/Src/control_rf69.c.obj: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_def.h
+CMakeFiles/Oplink.elf.dir/Src/control_rf69.c.obj: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_dma.h
+CMakeFiles/Oplink.elf.dir/Src/control_rf69.c.obj: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_dma_ex.h
+CMakeFiles/Oplink.elf.dir/Src/control_rf69.c.obj: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_flash.h
+CMakeFiles/Oplink.elf.dir/Src/control_rf69.c.obj: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_flash_ex.h
+CMakeFiles/Oplink.elf.dir/Src/control_rf69.c.obj: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_gpio.h
+CMakeFiles/Oplink.elf.dir/Src/control_rf69.c.obj: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_gpio_ex.h
+CMakeFiles/Oplink.elf.dir/Src/control_rf69.c.obj: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pcd.h
+CMakeFiles/Oplink.elf.dir/Src/control_rf69.c.obj: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pcd_ex.h
+CMakeFiles/Oplink.elf.dir/Src/control_rf69.c.obj: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pwr.h
+CMakeFiles/Oplink.elf.dir/Src/control_rf69.c.obj: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_rcc.h
+CMakeFiles/Oplink.elf.dir/Src/control_rf69.c.obj: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_rcc_ex.h
+CMakeFiles/Oplink.elf.dir/Src/control_rf69.c.obj: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_spi.h
+CMakeFiles/Oplink.elf.dir/Src/control_rf69.c.obj: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim.h
+CMakeFiles/Oplink.elf.dir/Src/control_rf69.c.obj: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim_ex.h
+CMakeFiles/Oplink.elf.dir/Src/control_rf69.c.obj: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_uart.h
+CMakeFiles/Oplink.elf.dir/Src/control_rf69.c.obj: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_usb.h
+CMakeFiles/Oplink.elf.dir/Src/control_rf69.c.obj: ../Inc/control_rf69.h
+CMakeFiles/Oplink.elf.dir/Src/control_rf69.c.obj: ../Inc/main.h
+CMakeFiles/Oplink.elf.dir/Src/control_rf69.c.obj: ../Inc/stm32f1xx_hal_conf.h
+CMakeFiles/Oplink.elf.dir/Src/control_rf69.c.obj: ../Src/control_rf69.c
+
 CMakeFiles/Oplink.elf.dir/Src/main.c.obj: ../Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f103xb.h
 CMakeFiles/Oplink.elf.dir/Src/main.c.obj: ../Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f1xx.h
 CMakeFiles/Oplink.elf.dir/Src/main.c.obj: ../Drivers/CMSIS/Device/ST/STM32F1xx/Include/system_stm32f1xx.h
@@ -780,6 +819,8 @@ CMakeFiles/Oplink.elf.dir/Src/main.c.obj: ../Drivers/STM32F1xx_HAL_Driver/Inc/st
 CMakeFiles/Oplink.elf.dir/Src/main.c.obj: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim_ex.h
 CMakeFiles/Oplink.elf.dir/Src/main.c.obj: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_uart.h
 CMakeFiles/Oplink.elf.dir/Src/main.c.obj: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_usb.h
+CMakeFiles/Oplink.elf.dir/Src/main.c.obj: ../Inc/RFM69.h
+CMakeFiles/Oplink.elf.dir/Src/main.c.obj: ../Inc/control_rf69.h
 CMakeFiles/Oplink.elf.dir/Src/main.c.obj: ../Inc/main.h
 CMakeFiles/Oplink.elf.dir/Src/main.c.obj: ../Inc/stm32f1xx_hal_conf.h
 CMakeFiles/Oplink.elf.dir/Src/main.c.obj: ../Inc/usb_device.h

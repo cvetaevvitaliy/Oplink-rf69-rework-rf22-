@@ -184,6 +184,16 @@ stm32f1xx_hal_def.h
 stm32f1xx_hal_def.h
 ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_def.h
 
+../Inc/RFM69.h
+control_rf69.h
+-
+
+../Inc/control_rf69.h
+stdint.h
+-
+stdbool.h
+-
+
 ../Inc/main.h
 
 ../Inc/stm32f1xx_hal_conf.h
@@ -317,4 +327,8 @@ usb_device.h
 /Users/vitaliy/Desktop/Oplink/Src/usb_device.h
 usbd_cdc_if.h
 /Users/vitaliy/Desktop/Oplink/Src/usbd_cdc_if.h
+RFM69.h
+/Users/vitaliy/Desktop/Oplink/Src/RFM69.h
+stdlib.h
+-
 

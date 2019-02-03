@@ -63,8 +63,6 @@ SPI_HandleTypeDef hspi1;
 UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart3;
 
-
-extern USBD_HandleTypeDef hUsbDeviceFS;
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
 
@@ -72,11 +70,13 @@ extern USBD_HandleTypeDef hUsbDeviceFS;
 #define NODEID 22
 #define NETID 100
 
-char str_tx[21];
-char str_rx[21];
-uint16_t i = 0;
+char str_tx[256];
+char str_rx[256];
 int16_t rssiRX=0;
 
+/*uint8_t len;
+int8_t datarecive[61];
+uint8_t *pdata;*/
 
 typedef struct{
     uint8_t command;
@@ -93,6 +93,19 @@ typedef struct{
 Data DataTX;
 Data DataRX;
 
+struct {
+    char command[5];
+    char id[5];
+    char status[5];
+    char remote_command[5];
+    char data_power[5];
+    char data_1[5];
+    char data_2[5];
+    char data_3[5];
+    char data_4[5];
+}PrintData_s;
+
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -101,6 +114,7 @@ static void MX_GPIO_Init(void);
 static void MX_SPI1_Init(void);
 static void MX_USART1_UART_Init(void);
 static void MX_USART3_UART_Init(void);
+static void MX_NVIC_Init(void);
 
 /* USER CODE BEGIN PFP */
 /* Private function prototypes -----------------------------------------------*/
@@ -146,15 +160,19 @@ int main(void)
   MX_USART1_UART_Init();
   MX_USART3_UART_Init();
   MX_USB_DEVICE_Init();
+
+  /* Initialize interrupts */
+  MX_NVIC_Init();
   /* USER CODE BEGIN 2 */
 
-  LED_INIT ();
-    RFM69_initialize (RF69_433MHZ , NODEID , NETID);
-    RFM69_listen (true);
-    RFM69_initialize_listen ();
-    RFM69_encrypt (ENCRYPTKEY);
-    RFM69_promiscuous (true);
-    RFM69_setPowerLevel (31);
+   LED_INIT ();
+   RFM69_initialize (RF69_433MHZ ,NODEID ,NETID);
+   RFM69_listen (true);
+   RFM69_initialize_listen ();
+   RFM69_encrypt (ENCRYPTKEY);
+   RFM69_promiscuous (true);
+   RFM69_setPowerLevel (31);
+   RFM69_receiveBegin ();
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -162,26 +180,33 @@ int main(void)
   while (1)
   {
 
-
       if ( RFM69_receiveDone ()) {
-          HAL_GPIO_WritePin (GPIOB,GPIO_PIN_5,GPIO_PIN_RESET);
-          rssiRX = RFM69_readRSSI2 ();
           uint8_t len;
           int8_t datarecive[61];
-          uint8_t *pdata = RFM69_receive (&len);
+          uint8_t *pdata;
+          HAL_GPIO_WritePin (GPIOB,GPIO_PIN_5,GPIO_PIN_RESET);
+          rssiRX = RFM69_readRSSI2 ();
+          pdata = RFM69_receive (&len);
           for ( int i = 0 ; i < len ; i ++ )
               datarecive[ i ] = (( char ) pdata[ i ] );
           DataRX = *( Data * ) datarecive;
           sprintf(str_tx,"Temperature: [%d] Pressure: [%d] Humidity: [%d] Vbat: [%.2fV] RSSI: [%d] packet: %d  \r\n",DataRX.data_1,DataRX.data_2,
-                  DataRX.data_3,(DataRX.data_power/100.0),rssiRX,DataRX.remote_command);
-          CDC_Transmit_FS((unsigned char*)str_tx, strlen(str_tx));
-          HAL_GPIO_WritePin (GPIOB,GPIO_PIN_5,GPIO_PIN_SET);
+                DataRX.data_3,(DataRX.data_power/100.0),rssiRX,DataRX.remote_command);
+          CDC_Transmit_FS (( unsigned char * ) str_tx ,( uint16_t ) strlen (str_tx));
+          HAL_GPIO_WritePin (GPIOB ,GPIO_PIN_5 ,GPIO_PIN_SET);
+
       }
 
-      DataTX.remote_command++;
-      DataTX.id++;
-      DataTX.data_1=rand() %100;
-     // RFM69_send(100 , ( const void * ) ( &DataTX ) , sizeof (DataTX) , true);
+
+      if(DataRX.remote_command==3000) {
+          DataTX=DataRX;
+          DataRX.remote_command=0;
+          DataTX.remote_command ++;
+          DataTX.id ++;
+          DataTX.data_1 = rand () % 100;
+          HAL_Delay (500);
+          RFM69_send (100 ,( const void * ) ( &DataTX ) ,sizeof (DataTX) ,false);
+      }
 
 
 
@@ -213,7 +238,7 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.HSIState = RCC_HSI_ON;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
-  RCC_OscInitStruct.PLL.PLLMUL = RCC_PLL_MUL6;
+  RCC_OscInitStruct.PLL.PLLMUL = RCC_PLL_MUL9;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
     _Error_Handler(__FILE__, __LINE__);
@@ -228,13 +253,13 @@ void SystemClock_Config(void)
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;
   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
 
-  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_1) != HAL_OK)
+  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2) != HAL_OK)
   {
     _Error_Handler(__FILE__, __LINE__);
   }
 
   PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_USB;
-  PeriphClkInit.UsbClockSelection = RCC_USBCLKSOURCE_PLL;
+  PeriphClkInit.UsbClockSelection = RCC_USBCLKSOURCE_PLL_DIV1_5;
   if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
   {
     _Error_Handler(__FILE__, __LINE__);
@@ -250,6 +275,17 @@ void SystemClock_Config(void)
 
   /* SysTick_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
+}
+
+/**
+  * @brief NVIC Configuration.
+  * @retval None
+  */
+static void MX_NVIC_Init(void)
+{
+  /* EXTI0_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(EXTI0_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(EXTI0_IRQn);
 }
 
 /* SPI1 init function */
@@ -368,10 +404,6 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_PULLDOWN;
   HAL_GPIO_Init(bind_GPIO_Port, &GPIO_InitStruct);
-
-  /* EXTI interrupt init*/
-  HAL_NVIC_SetPriority(EXTI0_IRQn, 0, 0);
-  HAL_NVIC_EnableIRQ(EXTI0_IRQn);
 
 }
 
