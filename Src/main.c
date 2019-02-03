@@ -77,10 +77,8 @@ int16_t rssiRX=0;
 extern uint8_t RX_char[3];
 
 bool prit_char = false;
+bool recive_done = false;
 
-/*uint8_t len;
-int8_t datarecive[61];
-uint8_t *pdata;*/
 
 typedef struct{
     uint8_t command;
@@ -108,6 +106,8 @@ struct {
     char data_3[5];
     char data_4[5];
 }PrintData_s;
+
+int8_t *RX=0;
 
 
 /* USER CODE END PV */
@@ -184,26 +184,26 @@ int main(void)
   while (1)
   {
 
-      if ( RFM69_receiveDone ()) {
-          uint8_t len;
-          int8_t datarecive[61];
-          uint8_t *pdata;
-          HAL_GPIO_WritePin (GPIOB,GPIO_PIN_5,GPIO_PIN_RESET);
+
+      if ( RFM69_receiveDone()) {
           rssiRX = RFM69_readRSSI2 ();
-          pdata = RFM69_receive (&len);
-          for ( int i = 0 ; i < len ; i ++ )
-              datarecive[ i ] = (( char ) pdata[ i ] );
-          DataRX = *( Data * ) datarecive;
-          if (prit_char==false)
-          sprintf(str_tx,"Temperature: [%d] Pressure: [%d] Humidity: [%d] Vbat: [%.2fV] RSSI: [%d] packet: %d  \r\n",DataRX.data_1,DataRX.data_2,
-                DataRX.data_3,(DataRX.data_power/100.0),rssiRX,DataRX.remote_command);
+          RX = RFM69_Read_P ();
+          DataRX = *( Data * ) RX;
+          recive_done=true;
+      }
+
+      if (recive_done) {
+          if ( prit_char == false )
+              sprintf (str_tx ,
+                       "Temperature: [%d] Pressure: [%d] Humidity: [%d] Vbat: [%.2fV] RSSI: [%d] packet: %d  \r\n" ,
+                       DataRX.data_1 ,DataRX.data_2 ,
+                       DataRX.data_3 ,( DataRX.data_power / 100.0 ) ,rssiRX ,DataRX.remote_command);
           else
-               sprintf(str_tx,"%d,%d,%d,%.2f,%d,%d\r\n",DataRX.data_1,DataRX.data_2,
-                DataRX.data_3,(DataRX.data_power/100.0),rssiRX,DataRX.remote_command);
+              sprintf (str_tx ,"%d,%d,%d,%.2f,%d,%d\r\n" ,DataRX.data_1 ,DataRX.data_2 ,
+                       DataRX.data_3 ,( DataRX.data_power / 100.0 ) ,rssiRX ,DataRX.remote_command);
           CDC_Transmit_FS (( unsigned char * ) str_tx ,( uint16_t ) strlen (str_tx));
           HAL_GPIO_WritePin (GPIOB ,GPIO_PIN_5 ,GPIO_PIN_SET);
-
-
+          recive_done=false;
       }
 
 

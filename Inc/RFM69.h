@@ -78,6 +78,8 @@ void RFM69_setMode(uint8_t newMode);
 void RFM69_listen(bool onOff);
 void RFM69_initialize_listen(void);
 
+int8_t* RFM69_Read_P(void);
+
 
 // module interface, platform specific
 extern void noInterrupts(void);                // function to disable interrupts

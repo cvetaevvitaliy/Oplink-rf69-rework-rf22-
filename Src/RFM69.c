@@ -9,6 +9,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 uint8_t* temp;
+int8_t RX_FIFO[61];
   uint8_t data[RF69_MAX_DATA_LEN]; // recv/xmit buf, including header & crc bytes
  volatile uint8_t datalen;
  volatile uint8_t senderID;
@@ -886,6 +887,18 @@ void RFM69_initialize_listen()
   RFM69_writeReg(REG_LISTEN2, 0xF5); //0x40: 64*4.1ms~262ms idle
   RFM69_writeReg(REG_LISTEN3, 0x20); //0x20: 32*64us~2ms RX
   RFM69_writeReg(REG_RXTIMEOUT2, 0x1F);//needed otherwise will always be in RX mode
+}
+
+int8_t *RFM69_Read_P (void) {
+    uint8_t len_fifo;
+    uint8_t *DATA_p;
+    DATA_p = RFM69_receive (&len_fifo);
+    for ( int i = 0 ; i < len_fifo ; i ++ )
+        RX_FIFO[ i ] = (( char ) DATA_p[ i ] );
+
+    DATA_p=NULL;
+
+    return RX_FIFO;
 }
 
 
