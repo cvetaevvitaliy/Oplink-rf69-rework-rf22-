@@ -195,6 +195,7 @@ int main(void)
           CDC_Transmit_FS (( unsigned char * ) str_tx ,( uint16_t ) strlen (str_tx));
           HAL_GPIO_WritePin (GPIOB ,GPIO_PIN_5 ,GPIO_PIN_SET);
 
+
       }
 
 
