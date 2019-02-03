@@ -74,6 +74,10 @@ char str_tx[256];
 char str_rx[256];
 int16_t rssiRX=0;
 
+extern uint8_t RX_char[3];
+
+bool prit_char = false;
+
 /*uint8_t len;
 int8_t datarecive[61];
 uint8_t *pdata;*/
@@ -190,7 +194,11 @@ int main(void)
           for ( int i = 0 ; i < len ; i ++ )
               datarecive[ i ] = (( char ) pdata[ i ] );
           DataRX = *( Data * ) datarecive;
+          if (prit_char==false)
           sprintf(str_tx,"Temperature: [%d] Pressure: [%d] Humidity: [%d] Vbat: [%.2fV] RSSI: [%d] packet: %d  \r\n",DataRX.data_1,DataRX.data_2,
+                DataRX.data_3,(DataRX.data_power/100.0),rssiRX,DataRX.remote_command);
+          else
+               sprintf(str_tx,"%d,%d,%d,%.2f,%d,%d\r\n",DataRX.data_1,DataRX.data_2,
                 DataRX.data_3,(DataRX.data_power/100.0),rssiRX,DataRX.remote_command);
           CDC_Transmit_FS (( unsigned char * ) str_tx ,( uint16_t ) strlen (str_tx));
           HAL_GPIO_WritePin (GPIOB ,GPIO_PIN_5 ,GPIO_PIN_SET);
@@ -200,14 +208,42 @@ int main(void)
 
 
       if(DataRX.remote_command==3000) {
+          HAL_GPIO_WritePin (GPIOB ,LED_TX_Pin ,GPIO_PIN_RESET);
           DataTX=DataRX;
+          DataTX.data_4=rssiRX;
           DataRX.remote_command=0;
-          DataTX.remote_command ++;
-          DataTX.id ++;
-          DataTX.data_1 = rand () % 100;
           HAL_Delay (500);
           RFM69_send (100 ,( const void * ) ( &DataTX ) ,sizeof (DataTX) ,false);
+          HAL_GPIO_WritePin (GPIOB ,LED_TX_Pin ,GPIO_PIN_SET);
       }
+
+      switch (RX_char[0]){
+          case '1':
+              prit_char=true;
+              RX_char[0]=0;
+              break;
+          case '2':
+              prit_char=false;
+              RX_char[0]=0;
+              break;
+          case '3':
+              HAL_GPIO_TogglePin (GPIOB,LED_RX_Pin);
+              RX_char[0]=0;
+              break;
+          case '4':
+              RX_char[0]=0;
+              DataTX=DataRX;
+              RFM69_send (100 ,( const void * ) ( &DataTX ) ,sizeof (DataTX) ,false);
+              break;
+          default:
+              break;
+
+      }
+
+      if (HAL_GPIO_ReadPin (GPIOB,GPIO_PIN_8))
+            NVIC_SystemReset();
+
+
 
 
 
