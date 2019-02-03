@@ -48,10 +48,11 @@
   */
 
 /* Includes ------------------------------------------------------------------*/
+#include <stdbool.h>
 #include "usbd_cdc_if.h"
 
 /* USER CODE BEGIN INCLUDE */
-
+#include "stdint.h"
 /* USER CODE END INCLUDE */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -62,7 +63,7 @@
 /* Private variables ---------------------------------------------------------*/
 uint8_t RX_buff[256]={0};
 uint8_t RX_char[3]={0};
-
+bool echo = true;
 /* USER CODE END PV */
 
 /** @addtogroup STM32_USB_OTG_DEVICE_LIBRARY
@@ -294,9 +295,11 @@ static int8_t CDC_Receive_FS(uint8_t* Buf, uint32_t *Len)
 {
   /* USER CODE BEGIN 6 */
   USBD_CDC_SetRxBuffer(&hUsbDeviceFS, &Buf[0]);
-  if (Buf[0]==13)
+  if (Buf[0]=='?')
+    echo=false;
+  if (Buf[0]==13&&echo==true)
   {
-    strncat (RX_buff,"\n",*Len);
+    strncat (RX_buff,"\r\n",*Len);
     CDC_Transmit_FS(RX_buff,strlen (RX_buff));
     for (int i = 0; i < 255; i++)
       RX_buff[i]=0;
